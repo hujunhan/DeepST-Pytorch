@@ -2,3 +2,6 @@
 data/*
 .vscode/
 .ipynb_checkpoints/
+*.pyc
+*.pyo
+**/__pycache__/
