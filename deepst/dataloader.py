@@ -1,12 +1,10 @@
 import h5py
 import numpy as np
-import sys
-from torch import nn
-import torch
-from torch.nn import functional as F
 import os
-
-
+import warnings
+warnings.filterwarnings('ignore')
+globalpath=os.path.abspath('..')
+print('This project\'s absolute path: ',globalpath)
 def del_incomp_data(data_Path):
 	reader = h5py.File(data_Path, 'r')
 	data = reader['data'].value
@@ -53,7 +51,9 @@ def get_all_data():
 	Y = []
 	timeslots = []
 	for year in range(13, 16):
-		fname = 'C:\\Users\\hu\\PycharmProjects\\DeepST-Pytorch\\data\\TaxiBJ\\BJ{}_M32x32_T30_InOut.h5'.format(year)
+		fname = 'BJ{}_M32x32_T30_InOut.h5'.format(year)
+		fname=os.path.join(globalpath,'data\TaxiBJ',fname)
+		#print(fname)
 		data_temp, date_temp = del_incomp_data(fname)
 		close_temp, period_temp, trend_temp, Y_temp, timeslots_temp = get_train_data(data_temp, date_temp)
 		close_data.extend(close_temp)
@@ -100,7 +100,7 @@ def get_train_data(data, date, close=3, period=3, trend=3):
 
 
 def get_feature_data(date):
-	feature_Path = 'C:\\Users\\hu\\PycharmProjects\\DeepST-Pytorch\\data\\TaxiBJ\\BJ_Meteorology.h5'
+	feature_Path=os.path.join(globalpath,'data\TaxiBJ', 'BJ_Meteorology.h5')
 	reader = h5py.File(feature_Path, 'r')
 	for key in reader.keys():
 		print(key, reader[key].shape, reader[key].dtype)
@@ -129,4 +129,4 @@ def get_feature_data(date):
 
 
 if __name__ == '__main__':
-	data, date = get_all_data()
+	get_all_data()
